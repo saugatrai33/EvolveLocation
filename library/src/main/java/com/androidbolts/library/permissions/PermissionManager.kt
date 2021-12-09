@@ -86,25 +86,29 @@ abstract class PermissionManager {
         permissions: Array<out String>,
         grantResults: IntArray
     ) {
-
         if (requestCode == LOCATION_PERMISSIONS_REQUEST_CODE) {
             when {
+
                 grantResults.isEmpty() -> {
                     weakPermissionListener.get()?.onPermissionDenied()
                 }
+
                 (grantResults[0] == PackageManager.PERMISSION_GRANTED) -> {
                     weakPermissionListener.get()?.onPermissionGranted()
                 }
 
                 else -> {
+
                     val intent = Intent()
                     intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
                     val uri = Uri.fromParts(
                         "package",
                         BuildConfig.LIBRARY_PACKAGE_NAME, null
                     )
+
                     intent.data = uri
                     intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+
                     when {
                         getFragment() != null -> getFragment()?.startActivity(intent)
                         getActivity() != null -> getActivity()?.startActivity(intent)
@@ -113,7 +117,9 @@ abstract class PermissionManager {
                             "You can either start location activity from fragment or activity."
                         )
                     }
+
                 }
+
             }
         }
     }
@@ -127,4 +133,5 @@ abstract class PermissionManager {
         val isEnabled = service?.isProviderEnabled(GPS_PROVIDER)
         return isEnabled ?: false
     }
+
 }

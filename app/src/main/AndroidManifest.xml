@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.androidbolts.locationmanager">
+    package="com.androidbolts.saugatlocationmanager">
 
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -12,15 +12,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.androidbolts.locationmanager.MainActivity">
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBms2IdN3tG6t9VuMNV_TnHRZFEnPJUZDQ" />
+
+        <activity
+            android:name="com.androidbolts.saugatlocationmanager.MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".fragment.FragmentContainerActivity" />
-        <activity android:name=".activity.LocationActivity" />
+        <activity android:name="com.androidbolts.saugatlocationmanager.fragment.FragmentContainerActivity" />
+        <activity android:name="com.androidbolts.saugatlocationmanager.activity.LocationActivity" />
     </application>
 
 </manifest>

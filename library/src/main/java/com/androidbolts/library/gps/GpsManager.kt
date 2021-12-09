@@ -4,17 +4,21 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.IntentSender
 import android.location.Location
+import android.location.LocationManager
+import android.os.Build
 import android.os.CountDownTimer
 import android.os.Looper
+import android.os.SystemClock
 import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import com.androidbolts.library.LocationModel
 import com.androidbolts.library.R
-import com.androidbolts.library.utils.LocationConstants
+import com.androidbolts.library.utils.*
 import com.androidbolts.library.utils.LocationConstants.REQUEST_CHECK_SETTINGS
 import com.androidbolts.library.utils.LocationConstants.TIME_OUT_NONE
 import com.androidbolts.library.utils.orElse
@@ -31,6 +35,9 @@ import com.google.android.gms.location.LocationSettingsStatusCodes
 import com.google.android.gms.location.SettingsClient
 
 internal class GpsManager internal constructor() : GpsProvider() {
+
+    val LOG_TAG = GpsManager::class.java.simpleName
+
     private var mFusedLocationClient: FusedLocationProviderClient? = null
     private var mSettingsClient: SettingsClient? = null
     private var mLocationRequest: LocationRequest = LocationRequest()
@@ -108,6 +115,7 @@ internal class GpsManager internal constructor() : GpsProvider() {
 
     private fun createLocationCallback() {
         mLocationCallback = object : LocationCallback() {
+            @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
             override fun onLocationResult(locationResult: LocationResult?) {
                 super.onLocationResult(locationResult)
                 mCurrentLocation = if (locationResult?.locations.isNullOrEmpty()) {
@@ -116,6 +124,11 @@ internal class GpsManager internal constructor() : GpsProvider() {
                     locationResult?.locations?.first()
                 }
                 mCurrentLocation?.let { currentLocation ->
+                    Log.d(
+                        LOG_TAG,
+                        "onLocationResult: NoKalmanFilterAccuracy:: ${currentLocation.accuracy}"
+                    )
+
                     val locationModel = LocationModel(
                         System.currentTimeMillis(),
                         currentLocation.latitude,
@@ -130,7 +143,11 @@ internal class GpsManager internal constructor() : GpsProvider() {
                 }
 
                 if (getLocationListener() != null) {
-                    getLocationListener()?.onLocationChanged(mCurrentLocation)
+                    mCurrentLocation?.let {
+                        KalmanUtils.kalmanFilter(mCurrentLocation!!) { loc ->
+                            getLocationListener()?.onLocationChanged(loc)
+                        }
+                    }
                 } else {
                     throw Exception("LocationListener is null. add setListener(this) on builder function of Location Manager.")
                 }
@@ -276,4 +293,5 @@ internal class GpsManager internal constructor() : GpsProvider() {
     private fun isLocationAvailable(): Boolean {
         return mCurrentLocation != null && mCurrentLocation!!.latitude > 0.0 && mCurrentLocation!!.longitude > 0.0
     }
+
 }

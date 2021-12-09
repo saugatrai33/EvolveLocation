@@ -11,11 +11,13 @@ import com.androidbolts.library.utils.LocationConstants.TIME_OUT_NONE
 import java.lang.ref.WeakReference
 
 abstract class GpsProvider {
+
     private lateinit var weakContextProcessor: WeakReference<ContextProcessor>
     private var locationListener: LocationListener? = null
     private var showDialog: Boolean = false
     private var timeOut: Long = TIME_OUT_NONE
     private var prefs: PreferenceManager? = null
+
     abstract fun onCreate()
     abstract fun onResume()
     abstract fun onPause()

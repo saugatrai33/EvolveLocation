@@ -1,4 +1,4 @@
-package com.androidbolts.locationmanager.fragment
+package com.androidbolts.saugatlocationmanager.fragment
 
 import android.location.Location
 import android.os.Bundle
@@ -9,8 +9,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import com.androidbolts.library.LocationManager
-import com.androidbolts.locationmanager.R
-import com.androidbolts.locationmanager.base.BaseFragment
+import com.androidbolts.saugatlocationmanager.R
+import com.androidbolts.saugatlocationmanager.base.BaseFragment
 
 class LocationFragment private constructor() : BaseFragment() {
 
@@ -48,13 +48,16 @@ class LocationFragment private constructor() : BaseFragment() {
                 isObserverAdded = true
             }
             locationManager?.getLocation()
-       }
+        }
     }
 
     override fun onLocationChanged(location: Location?) {
         this.location = location
-        Log.d("Location fetched:", "${this.location?.latitude}, ${this.location?.longitude}")
+        Log.d(
+            "Location fetched:",
+            "${this.location?.latitude}, ${this.location?.longitude}, accuracy:: ${location!!.accuracy}"
+        )
         tvLocation?.text =
-            "Latitude: ${this.location?.latitude}\nLongitude: ${this.location?.longitude}"
+            "Latitude: ${this.location?.latitude}\nLongitude: ${this.location?.longitude}\nAccuracy: ${location?.accuracy}"
     }
 }

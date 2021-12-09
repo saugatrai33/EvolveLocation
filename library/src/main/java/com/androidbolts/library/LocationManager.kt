@@ -38,7 +38,7 @@ class LocationManager internal constructor(
         this.gpsProvider.setPrefs(this.prefs)
     }
 
-    class Builder (context: Context) {
+    class Builder(context: Context) {
 
         private lateinit var locationListener: LocationListener
         private var timeOut: Long = LocationConstants.TIME_OUT_NONE
@@ -114,7 +114,7 @@ class LocationManager internal constructor(
             if (hasPermission) {
                 if (isProviderEnabled) {
                     gpsProvider.onResume()
-                }else {
+                } else {
                     gpsProvider.enableGps()
                 }
             }
@@ -144,7 +144,7 @@ class LocationManager internal constructor(
     }
 
     @ExperimentalSharedPrefs
-    /** This is currently is experimental state so it may not work. */
+            /** This is currently is experimental state so it may not work. */
     fun getLastUpdatedLocation(): LocationModel? {
         return prefs?.getLocationModel()
     }

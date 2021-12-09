@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">LocationManager</string>
+    <string name="app_name">SaugatLocationManager</string>
     <string name="location_activity">Location Activity</string>
     <string name="location_fragment">Location Fragment</string>
 </resources>

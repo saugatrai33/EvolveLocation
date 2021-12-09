@@ -1,12 +1,12 @@
-package com.androidbolts.locationmanager.fragment
+package com.androidbolts.saugatlocationmanager.fragment
 
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import com.androidbolts.locationmanager.R
-import com.androidbolts.locationmanager.databinding.ActivityFragmentContainerBinding
+import com.androidbolts.saugatlocationmanager.R
+import com.androidbolts.saugatlocationmanager.databinding.ActivityFragmentContainerBinding
 
 class FragmentContainerActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFragmentContainerBinding

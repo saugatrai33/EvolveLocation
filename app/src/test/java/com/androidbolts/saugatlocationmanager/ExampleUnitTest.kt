@@ -1,4 +1,4 @@
-package com.androidbolts.locationmanager
+package com.androidbolts.saugatlocationmanager
 
 import org.junit.Test
 
