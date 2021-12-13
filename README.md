@@ -1,5 +1,5 @@
 # LocationManager
-[![GitHub release](https://img.shields.io/github/v/release/nawinkhatiwada/LocationManager)](https://github.com/saugatrai33/SaugatLocationManager/releases)
+[![GitHub release](https://github.com/saugatrai33/SaugatLocationManager)](https://github.com/saugatrai33/SaugatLocationManager/releases)
 
 To get Location this library follows few steps:
 <ul>
