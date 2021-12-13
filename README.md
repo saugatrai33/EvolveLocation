@@ -25,7 +25,7 @@ allprojects {
 
   ```
   dependencies {
-	        implementation 'com.github.nawinkhatiwada:LocationManager:xyz'
+	        implementation 'com.github.saugatrai33:SaugatLocationManager:xyz'
 	}
   ```
   Add following two lines on `AndroidManifest.xml`
@@ -90,7 +90,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
   
   # License #
 ```text
-   Copyright 2019 nawinkhatiwada
+   Copyright 2021 saugatrai33
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
