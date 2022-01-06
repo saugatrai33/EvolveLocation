@@ -1,4 +1,4 @@
-package com.androidbolts.library.utils
+package com.androidbolts.saugatlocationmanager
 
 /**
  * Created by Takamitsu Mizutori on 2018/12/08.
