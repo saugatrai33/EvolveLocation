@@ -1,5 +1,5 @@
 # LocationManager
-[![GitHub release](https://img.shields.io/github/v/release/nawinkhatiwada/LocationManager)](https://github.com/nawinkhatiwada/LocationManager/releases/latest)
+[![GitHub release](https://github.com/saugatrai33/SaugatLocationManager)](https://github.com/saugatrai33/SaugatLocationManager/releases)
 
 To get Location this library follows few steps:
 <ul>
@@ -25,7 +25,7 @@ allprojects {
 
   ```
   dependencies {
-	        implementation 'com.github.nawinkhatiwada:LocationManager:xyz'
+	        implementation 'com.github.saugatrai33:SaugatLocationManager:xyz'
 	}
   ```
   Add following two lines on `AndroidManifest.xml`
@@ -36,7 +36,7 @@ allprojects {
   ```
   
   After syncing the project, initialize the location manager. Implement LocationListener of package `com.androidbolts.library.LocationListener` to override some required methods for fetching the location. You must add `locationManager` to the lifecycler observer in order to get the location. If you don't want to showProgressbar while fetching the location, you can set `showLoading(false)`. You can also change the timeout duration using `setRequestTimeOut(LocationConstants.TIME_OUT_LONG)`. Use `LocationConstants.TIMEOUT_NONE` if you want to disable timeout.
- You can see the sample project [here](https://github.com/nawinkhatiwada/LocationManager/tree/master/app) for proper implementation.
+ You can see the sample project [here](https://github.com/saugatrai33/SaugatLocationManager/tree/master/app) for proper implementation.
 
   
   ```
@@ -90,7 +90,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
   
   # License #
 ```text
-   Copyright 2019 nawinkhatiwada
+   Copyright 2021 saugatrai33
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
