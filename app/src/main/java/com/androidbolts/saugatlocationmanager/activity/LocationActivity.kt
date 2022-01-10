@@ -1,35 +1,44 @@
 package com.androidbolts.saugatlocationmanager.activity
 
-import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
 import android.location.Location
-import android.nfc.Tag
 import android.os.Build
 import android.os.Bundle
-import android.os.SystemClock
-import android.util.Log
+import androidx.annotation.ColorRes
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.databinding.DataBindingUtil
 import com.androidbolts.library.LocationManager
-import com.androidbolts.saugatlocationmanager.KalmanLatLong
 import com.androidbolts.saugatlocationmanager.R
 import com.androidbolts.saugatlocationmanager.base.BaseActivity
 import com.androidbolts.saugatlocationmanager.databinding.ActivityLocationBinding
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.*
 
 val TAG = LocationActivity::class.java.canonicalName
 
 class LocationActivity : BaseActivity() {
 
     private lateinit var binding: ActivityLocationBinding
-    private var location: Location? = null
     private var locationManager: LocationManager? = null
-
     private var map: GoogleMap? = null
+    private var locationAccuracyCircle: Circle? = null
+    private var latLng: LatLng? = null
+    private var accuracy: Double? = null
+    private var zoom: Float = 19.5f
+    private var predictionRange: Circle? = null
+    private var icLocationCurrent: BitmapDescriptor? = null
+    private var bitmap: Bitmap? = null
 
     companion object {
         fun getIntent(activity: Activity): Intent {
@@ -40,17 +49,15 @@ class LocationActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         supportActionBar?.title = "Location Activity"
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_location)
+        binding = DataBindingUtil.setContentView(
+            this,
+            R.layout.activity_location
+        )
         getLocation()
-
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync { googleMap ->
             this.map = googleMap
-
-//            map.uiSettings.isZoomControlsEnabled = false
-//            map.isMyLocationEnabled = false
-
             if (ActivityCompat.checkSelfPermission(
                     this,
                     android.Manifest.permission.ACCESS_FINE_LOCATION
@@ -59,18 +66,20 @@ class LocationActivity : BaseActivity() {
                     android.Manifest.permission.ACCESS_COARSE_LOCATION
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
                 return@getMapAsync
             }
-            map?.isMyLocationEnabled = true
-            map?.uiSettings?.isMyLocationButtonEnabled = true
 
-            map!!.uiSettings.isCompassEnabled = true
-            map!!.uiSettings.isMyLocationButtonEnabled = true
+//            map?.isMyLocationEnabled = true
+            map?.uiSettings?.isZoomControlsEnabled = true
+//            map?.uiSettings?.isMyLocationButtonEnabled = true
+            map?.uiSettings?.isCompassEnabled = true
+//            map?.isBuildingsEnabled = true
+            icLocationCurrent = BitmapDescriptorFactory.fromResource(R.drawable.ic_shutter_normal)
+            bitmap = R.drawable.ic_shutter_normal.toBitmap(this, R.color.colorAccent)
+        }
+
+        binding.btnCurrentLocation.setOnClickListener {
+            cameraAnim2()
         }
     }
 
@@ -80,13 +89,103 @@ class LocationActivity : BaseActivity() {
         locationManager?.getLocation()
     }
 
-    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onLocationChanged(location: Location?) {
-        this.location = location
-        binding.tvCurrentLocation.text = """Latitude: ${this.location?.latitude}
-                                            Longitude: ${this.location?.longitude}
-                                            Acc: ${this.location?.accuracy}
+        if (location?.accuracy!! < 0) return
+        latLng = LatLng(location.latitude, location.longitude)
+        accuracy = location.accuracy.toDouble()
+        zoom = map?.cameraPosition?.zoom!!
+//        showLocationAccuracyCircle()
+//        drawPredictedRange()
+        drawUserLocation()
+        cameraAnim()
+        binding.tvCurrentLocation.text = """Lat: ${location?.latitude}
+                                            Lng: ${location?.longitude}
+                                            Acc: ${location?.accuracy}
                                           """
     }
 
+    private fun drawPredictedRange() {
+        predictionRange?.let {
+            it.center = latLng!!
+        } ?: run {
+            predictionRange = map?.addCircle(
+                CircleOptions()
+                    .center(latLng!!)
+                    .fillColor(Color.argb(50, 30, 207, 0))
+                    .strokeColor(Color.argb(128, 30, 207, 0))
+                    .strokeWidth(1.0f)
+                    .radius(30.0)
+            ) //30 meters of the prediction range
+        }
+    }
+
+    private fun showLocationAccuracyCircle() {
+        locationAccuracyCircle?.let {
+            it.center = latLng!!
+        } ?: run {
+            this.locationAccuracyCircle = map?.addCircle(
+                CircleOptions()
+                    .center(latLng!!)
+                    .fillColor(Color.argb(64, 0, 0, 0))
+                    .strokeColor(Color.argb(64, 0, 0, 0))
+                    .strokeWidth(0.0f)
+                    .radius(accuracy!!)
+            ) //set radius to horizonal accuracy in meter.
+        }
+    }
+
+    private fun cameraAnim(zoomLevel: Float = 20f) {
+        val cameraPosition = CameraPosition.Builder()
+            .target(latLng!!) // Sets the center of the map to Mountain View
+            .zoom(zoom)            // Sets the zoom
+            .bearing(90f)         // Sets the orientation of the camera to east
+            .tilt(30f)            // Sets the tilt of the camera to 30 degrees
+            .build()              // Creates a CameraPosition from the builder
+        map?.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+    }
+
+    private fun cameraAnim2() {
+        val cameraPosition = CameraPosition.Builder()
+            .target(latLng!!) // Sets the center of the map to Mountain View
+            .zoom(20f)            // Sets the zoom
+            .bearing(90f)         // Sets the orientation of the camera to east
+            .tilt(30f)            // Sets the tilt of the camera to 30 degrees
+            .build()              // Creates a CameraPosition from the builder
+        map?.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+    }
+
+    private fun drawUserLocation() {
+        map?.clear()
+        map?.addMarker(
+            MarkerOptions()
+                .title("Current Location")
+                .snippet("Current Loc")
+                .position(latLng!!)
+                .flat(true)
+                .anchor(0.5f, 0.5f)
+                .icon(BitmapDescriptorFactory.fromBitmap(bitmap!!))
+        )
+    }
+
+    private fun Int.toBitmap(context: Context, @ColorRes tintColor: Int? = null): Bitmap? {
+
+        // retrieve the actual drawable
+        val drawable = ContextCompat.getDrawable(context, this) ?: return null
+        drawable.setBounds(0, 0, drawable.intrinsicWidth, drawable.intrinsicHeight)
+        val bm = Bitmap.createBitmap(
+            drawable.intrinsicWidth,
+            drawable.intrinsicHeight,
+            Bitmap.Config.ARGB_8888
+        )
+
+        // add the tint if it exists
+        tintColor?.let {
+            DrawableCompat.setTint(drawable, ContextCompat.getColor(context, it))
+        }
+        // draw it onto the bitmap
+        val canvas = Canvas(bm)
+        drawable.draw(canvas)
+        return bm
+    }
 }

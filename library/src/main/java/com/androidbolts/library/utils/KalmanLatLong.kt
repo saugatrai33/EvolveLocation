@@ -1,34 +1,17 @@
 package com.androidbolts.library.utils
 
-/**
- * Created by Takamitsu Mizutori on 2018/12/08.
- */
 class KalmanLatLong(Q_metres_per_second: Float) {
-    private val MinAccuracy = 1f
 
+    private val MinAccuracy = 1f
     private var Q_metres_per_second: Float = 0.toFloat()
     private var TimeStamp_milliseconds: Long = 0
     private var lat: Double = 0.toDouble()
     private var lng: Double = 0.toDouble()
     private var variance: Float = -1f // P matrix. Negative means object uninitialised.
-    // NB: units irrelevant, as long as same units used
-    // throughout
     var consecutiveRejectCount: Int = 0
 
     init {
         this.Q_metres_per_second = Q_metres_per_second
-    }
-
-    /*
-    fun KalmanLatLong(Q_metres_per_second: Float): ??? {
-        //this.Q_metres_per_second = Q_metres_per_second
-        variance = -1f
-        consecutiveRejectCount = 0
-    }
-    */
-
-    fun get_TimeStamp(): Long {
-        return TimeStamp_milliseconds
     }
 
     fun get_lat(): Double {
@@ -43,26 +26,6 @@ class KalmanLatLong(Q_metres_per_second: Float) {
         return Math.sqrt(variance.toDouble()).toFloat()
     }
 
-    fun SetState(
-        lat: Double, lng: Double, accuracy: Float,
-        TimeStamp_milliseconds: Long
-    ) {
-        this.lat = lat
-        this.lng = lng
-        variance = accuracy * accuracy
-        this.TimeStamp_milliseconds = TimeStamp_milliseconds
-    }
-
-    // / <summary>
-    // / Kalman filter processing for lattitude and longitude
-    // / </summary>
-    // / <param name="lat_measurement_degrees">new measurement of
-    // lattidude</param>
-    // / <param name="lng_measurement">new measurement of longitude</param>
-    // / <param name="accuracy">measurement of 1 standard deviation error in
-    // metres</param>
-    // / <param name="TimeStamp_milliseconds">time of measurement</param>
-    // / <returns>new state</returns>
     fun Process(
         lat_measurement: Double, lng_measurement: Double,
         accuracy: Float, TimeStamp_milliseconds: Long, Q_metres_per_second: Float

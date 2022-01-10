@@ -348,7 +348,7 @@ internal class GpsManager internal constructor() : GpsProvider() {
         )
         val predictedLat = kalmanFilter.get_lat()
         val predictedLng = kalmanFilter.get_lng()
-        val acc = kalmanFilter.get_accuracy()
+        val acc = kalmanFilter.get_accuracy() + 2f
 
         val predictedLocation = Location("")//provider name is unecessary
         predictedLocation.latitude = predictedLat//your coords of course
