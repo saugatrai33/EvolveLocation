@@ -10,6 +10,7 @@ import android.graphics.Color
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.annotation.ColorRes
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
@@ -95,8 +96,8 @@ class LocationActivity : BaseActivity() {
         latLng = LatLng(location.latitude, location.longitude)
         accuracy = location.accuracy.toDouble()
         zoom = map?.cameraPosition?.zoom!!
-//        showLocationAccuracyCircle()
-//        drawPredictedRange()
+        showLocationAccuracyCircle()
+        drawPredictedRange()
         drawUserLocation()
         cameraAnim()
         binding.tvCurrentLocation.text = """Lat: ${location?.latitude}

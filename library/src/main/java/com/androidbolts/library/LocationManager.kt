@@ -129,7 +129,7 @@ class LocationManager internal constructor(
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
-    internal fun onDestroy() {
+    fun onDestroy() {
         locationListener?.let {
             gpsProvider.onDestroy()
         }

@@ -124,6 +124,7 @@ internal class GpsManager internal constructor() : GpsProvider() {
             @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
             override fun onLocationResult(locationResult: LocationResult?) {
                 super.onLocationResult(locationResult)
+                Log.d(TAG, "onLocationResult: acc:: ${locationResult?.lastLocation?.accuracy}")
                 mCurrentLocation = if (locationResult?.locations.isNullOrEmpty()) {
                     locationResult?.lastLocation
                 } else {
@@ -147,7 +148,6 @@ internal class GpsManager internal constructor() : GpsProvider() {
                     timer?.cancel()
                     dismissDialog()
                 }
-
                 if (getLocationListener() != null) {
                     mCurrentLocation?.let {
                         filterAndAddLocation(it) { loc ->
@@ -372,14 +372,7 @@ internal class GpsManager internal constructor() : GpsProvider() {
         } else {
             kalmanFilter.consecutiveRejectCount = 0
         }
-
-        /* Notifiy predicted location to UI */
-        Log.d(
-            TAG,
-            "filterAndAddLocation: predictedAcc:: ${predictedLocation.accuracy}"
-        )
         currentSpeed = location.speed
-
         locationCallBack(predictedLocation)
     }
 
