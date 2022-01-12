@@ -9,7 +9,7 @@ apply plugin: 'kotlin-android-extensions'
 android {
     compileSdkVersion 30
     defaultConfig {
-        applicationId "com.androidbolts.saugatlocationmanager"
+        applicationId "com.androidbolts.evolvelocation"
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
