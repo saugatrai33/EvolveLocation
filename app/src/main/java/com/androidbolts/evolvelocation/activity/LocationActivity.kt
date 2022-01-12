@@ -1,4 +1,4 @@
-package com.androidbolts.saugatlocationmanager.activity
+package com.androidbolts.evolvelocation.activity
 
 import android.app.Activity
 import android.content.Context
@@ -10,7 +10,6 @@ import android.graphics.Color
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.annotation.ColorRes
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
@@ -18,9 +17,9 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.databinding.DataBindingUtil
 import com.androidbolts.library.LocationManager
-import com.androidbolts.saugatlocationmanager.R
-import com.androidbolts.saugatlocationmanager.base.BaseActivity
-import com.androidbolts.saugatlocationmanager.databinding.ActivityLocationBinding
+import com.androidbolts.evolvelocation.R
+import com.androidbolts.evolvelocation.base.BaseActivity
+import com.androidbolts.evolvelocation.databinding.ActivityLocationBinding
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment

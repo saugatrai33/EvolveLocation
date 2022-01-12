@@ -1,4 +1,4 @@
-package com.androidbolts.saugatlocationmanager
+package com.androidbolts.evolvelocation
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4

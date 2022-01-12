@@ -1,20 +1,19 @@
-package com.androidbolts.saugatlocationmanager.base
+package com.androidbolts.evolvelocation.base
 
 import android.location.Location
-import androidx.fragment.app.Fragment
+import androidx.appcompat.app.AppCompatActivity
 import com.androidbolts.library.LocationListener
 import com.androidbolts.library.LocationManager
 import com.androidbolts.library.utils.LocationConstants
 
-abstract class BaseFragment : Fragment(), LocationListener {
-
+abstract class BaseActivity : AppCompatActivity(), LocationListener {
     private var locationManager: LocationManager? = null
 
     fun initLocationManager(): LocationManager? {
-        locationManager = LocationManager.Builder(requireActivity().applicationContext)
-            .showLoading(false)
+        locationManager = LocationManager.Builder(applicationContext)
+            .showLoading(true)
+            .setActivity(this)
             .setListener(this)
-            .setFragment(this)
             .setRequestTimeOut(LocationConstants.TIME_OUT_LONG)
             .build()
         return locationManager

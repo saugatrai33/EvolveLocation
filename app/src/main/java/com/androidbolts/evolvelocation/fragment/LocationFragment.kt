@@ -1,4 +1,4 @@
-package com.androidbolts.saugatlocationmanager.fragment
+package com.androidbolts.evolvelocation.fragment
 
 import android.location.Location
 import android.os.Bundle
@@ -9,8 +9,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import com.androidbolts.library.LocationManager
-import com.androidbolts.saugatlocationmanager.R
-import com.androidbolts.saugatlocationmanager.base.BaseFragment
+import com.androidbolts.evolvelocation.R
+import com.androidbolts.evolvelocation.base.BaseFragment
 
 class LocationFragment private constructor() : BaseFragment() {
 
