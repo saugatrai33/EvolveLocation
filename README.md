@@ -24,7 +24,7 @@ allprojects {
   Add lastest dependency on app-level `build.gradle`. You can always see [Latest Release](https://github.com/nawinkhatiwada/LocationManager/releases/latest) from here.
 
   ```
-  implementation 'com.github.saugatrai33:SaugatLocationManager:2.1.1'
+  implementation 'com.github.saugatrai33:EvolveLocation:2.1.4'
   ```
   Add following two lines on `AndroidManifest.xml`
   
